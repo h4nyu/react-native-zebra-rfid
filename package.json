@@ -11,6 +11,10 @@
     "watch": "tsc -w",
     "prepublishOnly": "npm run build"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/h4nyu/react-native-zebra-barcode.git"
+  },
   "keywords": [
     "react-native"
   ],
@@ -20,7 +24,7 @@
     "typescript": "^3.5.1",
     "@types/react-native": "^0.60.30"
   },
-  "dependencies": {
+  "peerDdependencies": {
     "react-native": "^0.61.5"
   }
 }
