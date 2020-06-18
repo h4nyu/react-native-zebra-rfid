@@ -23,7 +23,7 @@
   	```
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
   	```
-      compile project(':react-native-zebra-rfid')
+    flatDir { dirs "$rootDir/../node_modules/@h4nyu/react-native-zebra-rfid/android/libs" }
   	```
 ## Usage
 ```javascript

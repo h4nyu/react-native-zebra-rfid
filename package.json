@@ -21,8 +21,9 @@
   "author": "Xinyuan Yao",
   "license": "MIT",
   "devDependencies": {
-    "typescript": "^3.5.1",
-    "@types/react-native": "^0.60.30"
+    "@react-native-community/cli-platform-android": "^4.10.0",
+    "@types/react-native": "^0.60.30",
+    "typescript": "^3.5.1"
   },
   "peerDdependencies": {
     "react-native": "^0.61.5"
