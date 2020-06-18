@@ -1,16 +1,18 @@
 {
   "compilerOptions": {
     "target": "esnext",
+    "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "strict": true,
     "noImplicitAny": true,
     "declaration": true,
     "jsx": "react-native",
-    "lib": ["esnext"],
+    "noEmit": true,
+    "strict": true,
     "baseUrl": "./",
-    "outDir": "./dist",
     "paths": {
       "~/*": ["src/*"]
     }
