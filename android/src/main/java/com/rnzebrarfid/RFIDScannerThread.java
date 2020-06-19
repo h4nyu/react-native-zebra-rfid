@@ -1,6 +1,7 @@
 package com.rnzebrarfid;
 import com.zebra.rfid.api3.RfidEventsListener;
 
+import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableNativeArray;
@@ -48,10 +49,26 @@ public class RFIDScannerThread extends Thread implements RfidEventsListener, RFI
 
   public RFIDScannerThread(ReactApplicationContext context) {
     this.context = context;
+    this.readers = new Readers(context, ENUM_TRANSPORT.BLUETOOTH);
+    this.readers.attach(this);
     this.devices = new ArrayList<ReaderDevice>();
   }
-  public void connect(final String deviceName, final Promise promise) {
+
+  @ReactMethod
+  public void getAvailableDevices(final Promise promise) {
+    Log.d(TAG, "GetAvailableReader");
+    try {
+      this.devices = readers.GetAvailableRFIDReaderList();
+      final WritableArray payloads = new WritableNativeArray();
+      for (ReaderDevice device : this.devices) {
+        payloads.pushMap(this.toDevicePayload(device));
+      }
+      promise.resolve(payloads);
+    } catch (InvalidUsageException e) {
+      promise.reject(e);
+    }
   }
+
 
   @Override
  	public void	RFIDReaderDisappeared(ReaderDevice device) {
@@ -124,4 +141,11 @@ public class RFIDScannerThread extends Thread implements RfidEventsListener, RFI
       this.sendEvent("onRfidRead", payload);
     });
   }
+  private WritableMap toDevicePayload(final ReaderDevice device) {
+    final WritableMap payload = new WritableNativeMap();
+    payload.putString("name", device.getName());
+    payload.putString("address", device.getAddress());
+    return payload;
+  }
+
 }

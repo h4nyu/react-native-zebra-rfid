@@ -23,7 +23,6 @@
   "devDependencies": {
     "@react-native-community/cli-platform-android": "^4.10.0",
     "@types/react-native": "^0.60.30",
-    "react-native": "^0.62.2",
     "typescript": "^3.5.1"
   },
   "peerDdependencies": {
