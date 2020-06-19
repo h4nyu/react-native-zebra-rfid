@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
+        classpath 'com.android.tools.build:gradle:3.5.2'
     }
 }
 
@@ -33,11 +33,14 @@ android {
 
 repositories {
     mavenCentral()
+    google()
+    jcenter()
     flatDir {dirs "libs"}
 }
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation 'com.android.support:localbroadcastmanager:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    // implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation(name:'API3_LIB-release-2.0.1.16', ext:'aar')
 }
