@@ -13,11 +13,13 @@ import {
 
 type State = {
   devices: IDevice[];
+  tagId: string;
 }
 
 class TestRfid extends React.Component<{}, State> {
   state: State = {
     devices: [],
+    tagId: "",
   };
 
   handleConnect = async () => {
@@ -25,10 +27,16 @@ class TestRfid extends React.Component<{}, State> {
       await connect(this.state.devices[0].name);
     }
   };
+  handleRfidRead = (tagId:string) => {
+    this.setState({
+      ...this.state,
+      tagId: tagId
+    });
+      
+  }
 
   handleGetDevices = async () => {
     const devices = await getAvailableDevices();
-    console.debug(devices);
     this.setState({
       ...this.state,
       devices: devices
@@ -48,7 +56,7 @@ class TestRfid extends React.Component<{}, State> {
     setMode("BARCODE");
   };
   render = () => {
-    const { devices } = this.state;
+    const { devices, tagId } = this.state;
     return (
       <View>
         {devices.map((x: IDevice) => (
@@ -59,6 +67,7 @@ class TestRfid extends React.Component<{}, State> {
 
         <Button title="disconnect" onPress={this.handleDisconnect} />
 
+        <Text>tagId: {tagId}</Text>
         <Button title="mode RFID" onPress={this.handleModeRfid} />
 
         <Button title="mode BARCODE" onPress={this.handleModeBarcode} />
@@ -71,7 +80,7 @@ class TestRfid extends React.Component<{}, State> {
 
         <Button title="power 200" onPress={() => setPower(200)} />
         <ZebraRfidReceiver
-          onRfidRead={console.debug}
+          onRfidRead={this.handleRfidRead}
           onAppeared={console.debug}
           onDisappeared={console.debug}
         />

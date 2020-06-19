@@ -781,10 +781,8 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
-"@h4nyu/react-native-zebra-rfid@^0.1.1-rc0.1":
-  version "0.1.1-rc0.1"
-  resolved "https://registry.yarnpkg.com/@h4nyu/react-native-zebra-rfid/-/react-native-zebra-rfid-0.1.1-rc0.1.tgz#c6d7d96a14b9be6c395a2fde38e6c5caa0bfdedb"
-  integrity sha512-W5SlQYD0GJMxgIWNzc8bsToWcvwkWa+8tdxBbQ0rr5KnPCBSgX2D6FwZN91/bKFNEqzzHUbDKOYhfuJt1L6fgw==
+"@h4nyu/react-native-zebra-rfid@file:../":
+  version "0.1.1-rc0.0"
 
 "@hapi/address@2.x.x":
   version "2.1.4"

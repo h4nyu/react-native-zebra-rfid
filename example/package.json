@@ -10,7 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@h4nyu/react-native-zebra-rfid": "^0.1.1-rc0.1",
+    "@h4nyu/react-native-zebra-rfid": "file:../",
     "@storybook/react-native": "^5.3.19",
     "react": "16.11.0",
     "react-native": "0.62.2"
