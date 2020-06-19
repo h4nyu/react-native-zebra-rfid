@@ -41,5 +41,5 @@ repositories {
 dependencies {
     implementation 'com.facebook.react:react-native:+'
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation(name:'API3_LIB-release-2.0.1.16', ext:'aar')
+    implementation(name:'API3_LIB-release-2.0.1.27', ext:'aar')
 }

@@ -784,6 +784,9 @@
 "@h4nyu/react-native-zebra-rfid@file:..":
   version "0.1.1-rc0.0"
 
+"@h4nyu/react-native-zebra-rfid@file:../":
+  version "0.1.1-rc0.0"
+
 "@hapi/address@2.x.x":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.4.tgz#5d67ed43f3fd41a69d4b9ff7b56e7c0d1d0a81e5"
