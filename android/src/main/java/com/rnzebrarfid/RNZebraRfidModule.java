@@ -54,6 +54,7 @@ public class RNZebraRfidModule extends ReactContextBaseJavaModule implements Rfi
   private Readers readers;
   private List<ReaderDevice> devices;
   private int MAX_POWER = 270;
+  private final RFIDScannerThread scannerThread;
 
 
   public RNZebraRfidModule(ReactApplicationContext reactContext) {
@@ -62,6 +63,8 @@ public class RNZebraRfidModule extends ReactContextBaseJavaModule implements Rfi
     this.readers = new Readers(reactContext, ENUM_TRANSPORT.BLUETOOTH);
     this.readers.attach(this);
     this.devices = new ArrayList<ReaderDevice>();
+    this.scannerThread = new RFIDScannerThread(this.reactContext);
+    this.scannerThread.start();
   }
   public Optional<RFIDReader> getRfidReader(){
     return this.devices.stream()
