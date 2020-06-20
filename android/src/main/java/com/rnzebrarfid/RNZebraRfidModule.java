@@ -45,7 +45,13 @@ import com.zebra.rfid.api3.INVENTORY_STATE;
 import com.zebra.rfid.api3.SL_FLAG;
 
 import java.util.ArrayList;
-import java.util.List; import java.util.Optional;
+import java.util.List; 
+import java.util.Optional;
+import java.util.Map;
+import java.util.HashMap;
+
+import android.widget.Toast;
+
 
 
 public class RNZebraRfidModule extends ReactContextBaseJavaModule {
@@ -56,6 +62,9 @@ public class RNZebraRfidModule extends ReactContextBaseJavaModule {
   private int MAX_POWER = 270;
   private final RFIDScannerThread scannerThread;
 
+  // test
+  private static final String DURATION_SHORT_KEY = "SHORT";
+  private static final String DURATION_LONG_KEY = "LONG";
 
   public RNZebraRfidModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -68,5 +77,22 @@ public class RNZebraRfidModule extends ReactContextBaseJavaModule {
   @Override
   public String getName() {
     return "RNZebraRfid";
+  }
+  @Override
+  public Map<String, Object> getConstants() {
+    final Map<String, Object> constants = new HashMap<>();
+    constants.put(DURATION_SHORT_KEY, Toast.LENGTH_SHORT);
+    constants.put(DURATION_LONG_KEY, Toast.LENGTH_LONG);
+    return constants;
+  }
+
+  @ReactMethod
+  public void getAvailableDevices(Promise promise) {
+    this.scannerThread.getAvailableDevices(promise);
+  }
+
+  @ReactMethod
+  public void connect(final String deviceName, Promise promise) {
+    this.scannerThread.connect(deviceName, promise);
   }
 }

@@ -148,4 +148,32 @@ public class RFIDScannerThread extends Thread implements RfidEventsListener, RFI
     return payload;
   }
 
+  public void connect(final String deviceName, final Promise promise) {
+    this.devices.stream()
+      .filter(x -> x.getName().equals(deviceName))
+      .findFirst()
+      .map(x -> x.getRFIDReader())
+      .ifPresent(x -> {
+        Log.d(TAG, "connect to " + deviceName);
+        try {
+          if(!x.isConnected()){
+            x.connect();
+          }
+          this.initRFIDReader(x);
+        } catch (InvalidUsageException | OperationFailureException e) {
+          promise.reject(e);
+        }
+      });
+    promise.resolve(deviceName);
+  }
+  private void initRFIDReader(RFIDReader rfidReader) {
+    try {
+      rfidReader.Events.addEventsListener(this);
+      rfidReader.Events.setHandheldEvent(true);
+      rfidReader.Events.setTagReadEvent(true);
+    } catch (InvalidUsageException | OperationFailureException e) {
+      e.printStackTrace();
+      Log.d(TAG,"ConfigureReader error");
+    }
+  }
 }

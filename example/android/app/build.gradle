@@ -210,7 +210,6 @@ dependencies {
     }
 
     implementation project(':react-native-zebra-rfid')
-    implementation project(':react-native-toast')
 
     if (enableHermes) {
         def hermesPath = "../../../node_modules/hermes-engine/android/";

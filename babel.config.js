@@ -6,7 +6,6 @@ module.exports = {
       {
         alias: {
           "@h4nyu/react-native-zebra-rfid": "./src/index.ts",
-          "react-native-toast": "./react-native-toast/index.js",
         },
         cwd: "babelrc"
       }

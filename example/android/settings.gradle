@@ -5,6 +5,3 @@ include ':app'
 
 include ':react-native-zebra-rfid'
 project(':react-native-zebra-rfid').projectDir = new File(rootProject.projectDir, '../../android')
-
-include ':react-native-toast'
-project(':react-native-toast').projectDir = new File(rootProject.projectDir, '../../react-native-toast/android')

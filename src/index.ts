@@ -1,8 +1,8 @@
 import { NativeModules, DeviceEventEmitter } from 'react-native';
-const { RNZebraRfid, RNM } = NativeModules;
+const { RNZebraRfid } = NativeModules;
 
 
-export interface IDevice {
+export type Device = {
   name: string;
   address: string;
 }
