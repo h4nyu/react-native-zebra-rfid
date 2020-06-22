@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import androidx.annotation.Nullable;
 
+import com.zebra.rfid.api3.RfidEventsListener;
 import com.zebra.rfid.api3.Antennas;
 import com.zebra.rfid.api3.ReaderDevice;
 import com.zebra.rfid.api3.RFIDReader;
@@ -54,45 +55,176 @@ import android.widget.Toast;
 
 
 
-public class RNZebraRfidModule extends ReactContextBaseJavaModule {
+public class RNZebraRfidModule extends ReactContextBaseJavaModule implements RfidEventsListener {
   private final String TAG = "ReactNative";
   private final ReactApplicationContext reactContext;
+
   private Readers readers;
   private List<ReaderDevice> devices;
   private int MAX_POWER = 270;
-  private final RFIDScannerThread scannerThread;
-
-  // test
-  private static final String DURATION_SHORT_KEY = "SHORT";
-  private static final String DURATION_LONG_KEY = "LONG";
 
   public RNZebraRfidModule(ReactApplicationContext reactContext) {
     super(reactContext);
     this.reactContext = reactContext;
     this.devices = new ArrayList<ReaderDevice>();
-    this.scannerThread = new RFIDScannerThread(this.reactContext);
-    this.scannerThread.start();
+    this.readers = new Readers(reactContext, ENUM_TRANSPORT.BLUETOOTH);
   }
 
   @Override
   public String getName() {
     return "RNZebraRfid";
   }
-  @Override
-  public Map<String, Object> getConstants() {
-    final Map<String, Object> constants = new HashMap<>();
-    constants.put(DURATION_SHORT_KEY, Toast.LENGTH_SHORT);
-    constants.put(DURATION_LONG_KEY, Toast.LENGTH_LONG);
-    return constants;
-  }
 
   @ReactMethod
   public void getAvailableDevices(Promise promise) {
-    this.scannerThread.getAvailableDevices(promise);
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          devices = readers.GetAvailableRFIDReaderList();
+
+          final WritableArray payloads = new WritableNativeArray();
+          for (ReaderDevice device : devices) {
+            payloads.pushMap(toDevicePayload(device));
+          }
+          promise.resolve(payloads);
+
+        } catch (InvalidUsageException e) {
+          promise.reject(e);
+        }
+      }
+    }).start();
   }
 
   @ReactMethod
   public void connect(final String deviceName, Promise promise) {
-    this.scannerThread.connect(deviceName, promise);
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        devices.stream()
+          .filter(x -> x.getName().equals(deviceName))
+          .findFirst()
+          .map(x -> x.getRFIDReader())
+          .ifPresent(x -> {
+            Log.d(TAG, "connect to " + deviceName);
+            try {
+              if(!x.isConnected()){
+                x.connect();
+              }
+              initRFIDReader(x);
+            } catch (InvalidUsageException | OperationFailureException e) {
+              promise.reject(e);
+              return;
+            }
+          });
+        promise.resolve(deviceName);
+        return;
+      }
+    }).start();
+  }
+
+  @ReactMethod
+  public void disconnect(final String deviceName, Promise promise) {
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        devices.stream()
+          .filter(x -> x.getName().equals(deviceName))
+          .findFirst()
+          .map(x -> x.getRFIDReader())
+          .ifPresent(x -> {
+            try {
+              if(x.isConnected()){
+                x.disconnect();
+              }
+            } catch (InvalidUsageException | OperationFailureException e) {
+              promise.reject(e);
+              return;
+            }
+          });
+        promise.resolve(deviceName);
+        return;
+      }
+    }).start();
+  }
+
+  private void initRFIDReader(RFIDReader rfidReader) {
+    try {
+      rfidReader.Events.addEventsListener(this);
+      rfidReader.Events.setHandheldEvent(true);
+      rfidReader.Events.setTagReadEvent(true);
+    } catch (InvalidUsageException | OperationFailureException e) {
+      e.printStackTrace();
+      Log.d(TAG,"ConfigureReader error");
+    }
+  }
+
+  private WritableMap toDevicePayload(final ReaderDevice device) {
+    final WritableMap payload = new WritableNativeMap();
+    payload.putString("name", device.getName());
+    payload.putString("address", device.getAddress());
+    return payload;
+  }
+
+  public void eventStatusNotify(RfidStatusEvents event) {
+    Log.d(TAG, "Status Notification: " + event.StatusEventData.getStatusEventType());
+    if (event.StatusEventData.HandheldTriggerEventData.getHandheldEvent() == HANDHELD_TRIGGER_EVENT_TYPE.HANDHELD_TRIGGER_PRESSED) {
+      this.performInventory();
+    }
+
+    if (event.StatusEventData.HandheldTriggerEventData.getHandheldEvent() == HANDHELD_TRIGGER_EVENT_TYPE.HANDHELD_TRIGGER_RELEASED) {
+      this.stopInventory();
+    }
+  }
+
+  private void performInventory() {
+    this.getRFIDReader().ifPresent(x -> {
+      try {
+        x.Actions.Inventory.perform();
+      } catch (InvalidUsageException | OperationFailureException e) {
+        e.printStackTrace();
+      }
+    });
+  }
+
+  public void eventReadNotify(RfidReadEvents event) {
+    this.getRFIDReader().ifPresent(x -> {
+      final TagData[] tags = x.Actions.getReadTags(1);
+      final WritableArray payload = new WritableNativeArray();
+      for (TagData tag : tags) {
+        payload.pushString(tag.getTagID());
+      }
+      this.sendEvent("onRfidRead", payload);
+    });
+  }
+
+  private void stopInventory() {
+    this.getRFIDReader().ifPresent(x -> {
+      try {
+        x.Actions.Inventory.stop();
+      } catch (InvalidUsageException | OperationFailureException e) {
+        e.printStackTrace();
+      }
+    });
+  }
+
+  private Optional<RFIDReader> getRFIDReader(){
+    return this.devices.stream()
+      .map(x -> x.getRFIDReader())
+      .filter(x -> x.isConnected())
+      .findFirst();
+  }
+
+  private void sendEvent(String eventName, @Nullable WritableMap params) {
+    reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, params);
+  }
+
+
+  private void sendEvent(String eventName, @Nullable WritableArray params) {
+    reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, params);
+  }
+
+  private void sendEvent(String eventName, @Nullable String params) {
+    reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, params);
   }
 }
