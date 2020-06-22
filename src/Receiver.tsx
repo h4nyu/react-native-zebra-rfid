@@ -17,7 +17,7 @@ interface IProps {
   onDisappeared: (deviceName: string) => void;
 }
 
-export class ZebraRfidReceiver extends React.Component<IProps> {
+export class Receiver extends React.Component<IProps> {
   subscriptions: EmitterSubscription[] = [];
 
   componentDidMount() {
