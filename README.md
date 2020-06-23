@@ -6,12 +6,13 @@
 `$ npm install @h4nyu/react-native-zebra-rfid --save`
 
 #### Android
-1. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
+1. Insert the following lines inside the dependencies block in `android/build.gradle`:
   	```
     flatDir { dirs "$rootDir/../node_modules/@h4nyu/react-native-zebra-rfid/android/libs" }
   	```
 ## Usage
-    see [example](./example/src/index.tsx)
+
+see [example](./example/src/index.tsx).
 
 ```typescript
 import React from 'react';
