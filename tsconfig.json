@@ -11,7 +11,8 @@
     "declaration": true,
     "jsx": "react",
     "lib": ["es6"],
-    "noEmit": true,
+    "outDir": "./dist",
+    "skipLibCheck": true,
     "strict": true,
     "baseUrl": "./",
     "paths": {
@@ -20,10 +21,10 @@
     }
   },
   "include": [
-    "src/**/*",
-    "./example/src/**/*"
+    "src/**/*"
   ],
   "exclude": [
+    "dist",
     "node_modules",
     "babel.config.js",
     "metro.config.js",

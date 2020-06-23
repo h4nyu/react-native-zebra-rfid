@@ -11,12 +11,12 @@
   "main": "dist/index.js",
   "files": [
     "README.md",
-    "android",
-    "src/index.ts"
+    "android"
   ],
   "scripts": {
     "build": "tsc",
-    "watch": "tsc -w",
+    "build-android": "sh build.sh",
+    "watch": "tsc -p tsconfig.example.json -w",
     "prepublishOnly": "npm run build"
   },
   "repository": {
