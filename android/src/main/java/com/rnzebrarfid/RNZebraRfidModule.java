@@ -148,6 +148,31 @@ public class RNZebraRfidModule extends ReactContextBaseJavaModule implements Rfi
     }).start();
   }
 
+  @ReactMethod
+  public void setMode(final String mode, Promise promise) {
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        getRFIDReader().ifPresent(x -> {
+          try {
+            if(mode.equals("RFID")){
+              x.Config.setTriggerMode(ENUM_TRIGGER_MODE.RFID_MODE, true);
+            }else if(mode.equals("BARCODE")){
+              x.Config.setTriggerMode(ENUM_TRIGGER_MODE.BARCODE_MODE, true);
+            }
+            promise.resolve(mode);
+            return;
+          } catch (InvalidUsageException | OperationFailureException e) {
+            e.printStackTrace();
+            promise.reject(e);
+            return;
+          }
+        });
+      }
+    }).start();
+  }
+
+
   private void initRFIDReader(RFIDReader rfidReader) {
     try {
       rfidReader.Events.addEventsListener(this);
@@ -189,7 +214,7 @@ public class RNZebraRfidModule extends ReactContextBaseJavaModule implements Rfi
 
   public void eventReadNotify(RfidReadEvents event) {
     this.getRFIDReader().ifPresent(x -> {
-      final TagData[] tags = x.Actions.getReadTags(1);
+      final TagData[] tags = x.Actions.getReadTags(100);
       final WritableArray payload = new WritableNativeArray();
       for (TagData tag : tags) {
         payload.pushString(tag.getTagID());

@@ -17,4 +17,4 @@ export default RNZebraRfid;
 // export const setMode:(mode:Mode) => Promise<Mode> = RNZebraRfid.setMode;
 // export const setPower:(power:number) => Promise<number> = RNZebraRfid.setPower;
 
-// export * from './Receiver'
+export * from './Receiver'

@@ -133,7 +133,7 @@ public class RFIDScannerThread extends Thread implements RfidEventsListener, RFI
 
   public void eventReadNotify(RfidReadEvents event) {
     this.getRFIDReader().ifPresent(x -> {
-      final TagData[] tags = x.Actions.getReadTags(1);
+      final TagData[] tags = x.Actions.getReadTags(100);
       final WritableArray payload = new WritableNativeArray();
       for (TagData tag : tags) {
         payload.pushString(tag.getTagID());
