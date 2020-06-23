@@ -1,1 +1,2 @@
-yarn tsc
+yarn build
+yarn publish
