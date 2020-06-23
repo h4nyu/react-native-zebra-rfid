@@ -29,8 +29,11 @@
   "devDependencies": {
     "@react-native-community/cli-platform-android": "^4.10.0",
     "@storybook/react-native": "^5.3.19",
+    "@types/lodash": "^4.14.155",
+    "@types/node": "^14.0.13",
     "@types/react-native": "^0.60.30",
     "babel-plugin-module-resolver": "^4.0.0",
+    "immutable": "^4.0.0-rc.12",
     "react": "^16.9.0",
     "react-native": "^0.62.2",
     "typescript": "^3.5.1"

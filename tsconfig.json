@@ -15,11 +15,13 @@
     "strict": true,
     "baseUrl": "./",
     "paths": {
-      "~/*": ["src/*"]
+      "~/*": ["src/*"],
+      "@h4nyu/react-native-zebra-rfid": ["src"]
     }
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "./example/src/**/*"
   ],
   "exclude": [
     "node_modules",

@@ -1,7 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import { View, Text, Button } from "react-native";
-import Zebra, {Receiver} from "@h4nyu/react-native-zebra-rfid";
+import * as Zebra from "@h4nyu/react-native-zebra-rfid";
+import {Set} from "immutable";
 const HLine = () => <View
   style={{
     borderBottomColor: 'black',
@@ -11,16 +12,15 @@ const HLine = () => <View
 />
 
 type State = {
-  tagId: string;
   devices: Zebra.Device[];
   deviceName: string | null;
   mode: string;
-  tagIds: string[];
+  tagIds: Set<string>;
 }
 
 class TestRfid extends React.Component<{}, State> {
   state: State = {
-    tagIds: [],
+    tagIds: Set(),
     devices: [],
     deviceName: null,
     mode: "RFID"
@@ -90,20 +90,33 @@ class TestRfid extends React.Component<{}, State> {
     }
   }
 
-  handleRfidRead = async (tagIds: string[]) => {
+  handleRfidRead = async (ids: string[]) => {
+    let {tagIds} = this.state;
     this.setState({
       ...this.state,
-      tagIds,
+      tagIds: tagIds.merge(Set(ids))
+    });
+  }
+
+  resetTagIds = async () => {
+    this.setState({
+      ...this.state,
+      tagIds: Set()
     });
   }
 
   render = () => {
-    const { tagId, devices, deviceName, mode, tagIds } = this.state;
+    const { devices, deviceName, mode, tagIds } = this.state;
     return (
       <View>
         <Button title="getAvailableDevices" onPress={this.handleGetDevices} />
         {
-          devices.map(x => <Text key={x.name}>name: {x.name}, address: {x.address}</Text>)
+          devices.map(x => 
+            <View key={x.name}>
+              <Text>name: {x.name}</Text>
+              <Text>address: {x.address}</Text>
+            </View>
+          )
         }
         <HLine/>
 
@@ -119,13 +132,15 @@ class TestRfid extends React.Component<{}, State> {
         <Text>mode: {mode}</Text>
         <HLine/>
 
-        <Text>tagIds</Text>
+        <Button title="reset tagIds" onPress={this.resetTagIds} />
+        <Text>tagIds: {tagIds.size} tags</Text>
         {
           tagIds.map(x => <Text key={x}>{x}</Text>)
         }
+
         <HLine/>
 
-        <Receiver
+        <Zebra.Receiver
           onRfidRead={this.handleRfidRead}
           onAppeared={console.info}
           onDisappeared={console.info}
