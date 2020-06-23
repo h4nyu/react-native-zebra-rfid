@@ -29,7 +29,7 @@
   	```
 ## Usage
 
-see [example](./example/src/index.tsx).
+see [example](./example/App.tsx).
 
 ```typescript
 import React from 'react';

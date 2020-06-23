@@ -19,7 +19,7 @@ type State = {
   tagIds: Set<string>;
 }
 
-class TestRfid extends React.Component<{}, State> {
+export default class App extends React.Component<{}, State> {
   state: State = {
     tagIds: Set(),
     devices: [],
@@ -150,8 +150,3 @@ class TestRfid extends React.Component<{}, State> {
     );
   };
 }
-
-
-storiesOf('TestRfid', module).add('default', () => (
-  <TestRfid />
-));
