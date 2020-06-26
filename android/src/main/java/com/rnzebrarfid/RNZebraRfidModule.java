@@ -171,6 +171,28 @@ public class RNZebraRfidModule extends ReactContextBaseJavaModule implements Rfi
       }
     }).start();
   }
+  @ReactMethod
+  public void setPower(final int power, Promise promise) {
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        getRFIDReader().ifPresent(x -> {
+          try {
+            final Antennas.AntennaRfConfig  config = x.Config.Antennas.getAntennaRfConfig(1);
+            config.setTransmitPowerIndex(power);
+            x.Config.Antennas.setAntennaRfConfig(1, config);
+            promise.resolve(power);
+            return;
+          } catch (InvalidUsageException | OperationFailureException e) {
+            e.printStackTrace();
+            promise.reject(e);
+            return;
+          }
+        });
+      }
+    }).start();
+  }
+
 
 
   private void initRFIDReader(RFIDReader rfidReader) {

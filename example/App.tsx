@@ -1,6 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
-import { View, Text, Button } from "react-native";
+import { View, Text, Button, TextInput } from "react-native";
 import * as Zebra from "@h4nyu/react-native-zebra-rfid";
 import {Set} from "immutable";
 
@@ -17,6 +17,7 @@ type State = {
   deviceName: string | null;
   mode: string;
   tagIds: Set<string>;
+  power:number;
 }
 
 export default class App extends React.Component<{}, State> {
@@ -24,7 +25,8 @@ export default class App extends React.Component<{}, State> {
     tagIds: Set(),
     devices: [],
     deviceName: null,
-    mode: "RFID"
+    mode: "RFID",
+    power: 100,
   };
 
 
@@ -106,8 +108,25 @@ export default class App extends React.Component<{}, State> {
     });
   }
 
+  handleOnPowerInput = (text:string) => {
+    let num = parseInt(text);
+    this.setState({
+      ...this.state,
+      power: isNaN(num) ? 0 : num,
+    });
+  }
+
+  setPower = async () => {
+    const {power} = this.state;
+    try{
+      await Zebra.setPower(power);
+    } catch {
+      console.warn('setPower fail')
+    }
+  }
+
   render = () => {
-    const { devices, deviceName, mode, tagIds } = this.state;
+    const { devices, deviceName, mode, tagIds, power } = this.state;
     return (
       <View>
         <Button title="getAvailableDevices" onPress={this.handleGetDevices} />
@@ -133,12 +152,15 @@ export default class App extends React.Component<{}, State> {
         <Text>mode: {mode}</Text>
         <HLine/>
 
+        <TextInput onChangeText={this.handleOnPowerInput} keyboardType={"numeric"} value={power.toString()} />
+        <Button title="set power" onPress={() => this.setPower()} />
+        <HLine/>
+
         <Button title="reset tagIds" onPress={this.resetTagIds} />
         <Text>tagIds: {tagIds.size} tags</Text>
         {
           tagIds.map(x => <Text key={x}>{x}</Text>)
         }
-
         <HLine/>
 
         <Zebra.Receiver

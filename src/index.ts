@@ -12,6 +12,6 @@ export const connect: (deviceName: string) => Promise<string> = RNZebraRfid.conn
 export const disconnect: (deviceName: string) => Promise<string>  = RNZebraRfid.disconnect;
 export const getAvailableDevices: () => Promise<Device[]> = RNZebraRfid.getAvailableDevices;
 export const setMode:(mode:Mode) => Promise<Mode> = RNZebraRfid.setMode;
-export const setPower:(power:number) => Promise<number> = RNZebraRfid.setPower;
+export const setPower:(power:number) => Promise<number> = RNZebraRfid.setPower; // value range: 0 - 230
 
 export * from './Receiver'
