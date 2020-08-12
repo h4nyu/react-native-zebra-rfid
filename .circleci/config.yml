@@ -17,6 +17,7 @@ jobs:
           name: Build Images
           command: |
             docker-compose build --parallel
+            docker-compose run --rm app yarn install
 
       - run:
           name: Tpye check App
