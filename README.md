@@ -1,5 +1,5 @@
 
-# @h4nyu/react-native-zebra-rfid
+# @oniku/react-native-zebra-rfid
 
 ## Getting started
 

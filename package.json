@@ -1,9 +1,9 @@
 {
-  "name": "@h4nyu/react-native-zebra-rfid",
+  "name": "@oniku/react-native-zebra-rfid",
   "title": "react native zebra rfid",
   "author": {
     "name": "Xinyuan Yao",
-    "email": "yao.ntno@gmail.com"
+    "email": "oniku.deploy@gmail.com"
   },
   "license": "MIT",
   "version": "0.1.2-rc1",
