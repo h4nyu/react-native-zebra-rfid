@@ -25,7 +25,9 @@
     "url": "git+https://github.com/h4nyu/react-native-zebra-rfid.git"
   },
   "keywords": [
-    "react-native"
+    "react-native",
+    "rfid",
+    "zebra"
   ],
   "devDependencies": {
     "@react-native-community/cli-platform-android": "^4.10.0",
