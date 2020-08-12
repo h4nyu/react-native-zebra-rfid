@@ -5,7 +5,7 @@ module.exports = {
       "module-resolver",
       {
         alias: {
-          "@oniku/react-native-zebra-rfid": "./src/index.ts",
+          "@oniku/react-native-zebra-rfid": "./src",
         },
         cwd: "babelrc"
       }
