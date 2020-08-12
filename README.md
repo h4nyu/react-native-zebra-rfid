@@ -33,14 +33,14 @@ see [example](./example/App.tsx).
 
 ## Build Demo App
 
-build docker image and enter the container.
-
+### build docker image and enter the container.
 ```
 docker-compose build
 docker-compose run --rm app bash
 ```
 
-build apk.
+### build apk
+
 apk is saved at `example/android/app/build/outputs/apk/debug/app-debug.apk`.
 
 ```sh
