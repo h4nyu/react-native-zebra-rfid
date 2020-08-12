@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Button, TextInput } from "react-native";
-import * as Zebra from "@h4nyu/react-native-zebra-rfid";
+import * as Zebra from "@oniku/react-native-zebra-rfid";
 import {Set} from "immutable";
 
 const HLine = () => <View
