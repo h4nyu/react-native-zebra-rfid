@@ -6,7 +6,7 @@
     "email": "oniku.deploy@gmail.com"
   },
   "license": "MIT",
-  "version": "0.1.2-rc1",
+  "version": "0.1.2-rc3",
   "description": "",
   "main": "dist/index.js",
   "files": [

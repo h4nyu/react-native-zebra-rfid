@@ -23,7 +23,7 @@
     allprojects {
         repositories {
             ...
-            flatDir { dirs "$rootDir/../node_modules/@h4nyu/react-native-zebra-rfid/android/libs" }
+            flatDir { dirs "$rootDir/../node_modules/@oniku/react-native-zebra-rfid/android/libs" }
         }
     }
   	```
